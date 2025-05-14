@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSettings } from '../context/SettingsContext';
-
+import { VideoFeed } from '../components/VideoFeed';
 
 const backendIp = import.meta.env.VITE_REACT_APP_BACKEND_IP;
 const resourceIP = import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_IP;
@@ -110,9 +110,17 @@ const getOverlap = (startA: Date, endA: Date, startB: Date, endB: Date): number 
   return Math.max(0, end - start);
 };
 
-
-
-
+const getSleepRecommendation = (ageInMonths: number): string => {
+  if (ageInMonths < 1) return "15-18 timer";
+  if (ageInMonths < 8) return "14-15 timer";
+  return "12-14 timer"; // 15 months to 3 years
+};
+const birthTimestamp = 1745406244000;
+const now = new Date();
+const ageInMonths = Math.floor(
+  (now.getTime() - birthTimestamp) / (1000 * 60 * 60 * 24 * 30.44)
+);
+const recommended = getSleepRecommendation(ageInMonths);
 const Hjem = () => {
   const [erVåken, setErVåken] = useState<boolean | null>(null);
   const [sidenTidspunkt, setSidenTidspunkt] = useState<string | null>(null);
@@ -212,12 +220,9 @@ const Hjem = () => {
 
       {/* Videofeed */}
       <div className="aspect-video w-full rounded-xl overflow-hidden shadow-md border">
-        <img
-          src={`http://${backendIp}/video_feed/processed`}
-          alt="Videofeed"
-          className="w-full h-full object-cover"
-        />
+         <VideoFeed />
       </div>
+
 
       {/* Søvnstatistikk */}
       {sleepStats && (
@@ -230,7 +235,16 @@ const Hjem = () => {
           </div>
         </div>
       )}
+        <div className="bg-white shadow-md rounded-xl p-4 border">
+            <h2 className="text-lg font-semibold mb-2">Aldersbasert søvnanbefaling</h2>
+            <div className="text-sm text-gray-700">
+                <div>👶 Alder: {ageInMonths} måneder</div>
+                <div>📝 Anbefalt søvn: {recommended}</div>
+            </div>
+            </div>
     </div>
+    
+
   );
 };
 
