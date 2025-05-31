@@ -31,6 +31,10 @@ app.get('/getResultAndReasons', (req, res) => {
   res.send([awakeProba, ...picked].join(','));
 });
 
+app.get('/getAvrgTime', (req, res) => {
+  res.send(23575);
+});
+
 app.get('/getSleepNotificationsEnabled', (req, res) => {
   res.send('true'); // or 'false' based on what you want to test
 });
@@ -51,6 +55,7 @@ app.get('/setAIFocusRegion/reset', (req, res) => {
   console.log('Reset focus region');
   res.sendStatus(200);
 });
+
 
 app.listen(PORT, () => {
   console.log(`Mock backend running on http://localhost:${PORT}`);
